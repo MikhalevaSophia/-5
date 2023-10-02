@@ -1,0 +1,98 @@
+using System;
+using System.Collections;
+using System.Collections.Generic;
+using System.Linq;
+using System.Runtime.ExceptionServices;
+using System.Text;
+using System.Threading.Tasks;
+
+namespace task2
+{
+    class MyList<T> : IEnumerable<T>
+    {
+        public T[] newlist = new T[5];
+        int size = 5;
+        int index = 0;
+        public MyList(params T[] newlist)
+        {
+            newlist = new T[newlist.Count()];
+            size = newlist.Count();
+            foreach (T item in newlist)
+            {
+                newlist[index] = item;
+                index++;
+            }
+        }
+        public T this[int item]
+        {
+            get { return newlist[item]; }
+            set { newlist[item] = value;}
+        }
+        public void Add(params T[] newList)
+        {
+            if(newlist.Count() <= size - newList.Count())
+            {
+                T[] newlist2 = new T[newList.Count()];
+                for(int i = 0; i < index; i++)
+                {
+                    newlist2[i] = newList[i];
+                }
+                newList = new T[newList.Count() + size];
+                size = newlist2.Count() + size;
+                for(int i = 0;i < index; i++)
+                {
+                    newList[i] = newlist2[i];
+                }
+            }
+            foreach(T item in newlist)
+            {
+                newlist[index] = item;
+                index++;
+            }
+
+        }
+        public void Add( T x)
+        {
+            Array.Resize(ref newlist, newlist.Length+1);
+            newlist[newlist.Count() -1] = x;
+        }
+        public int Size
+        {
+            get
+            {
+                Console.Write("Size:");
+                return newlist.Count();
+            }
+        }
+        public void Print()
+        {
+            for(int i = 0; i < index; i++)
+            {
+                Console.WriteLine(newlist[i]);
+            }
+        }
+
+        public IEnumerator<T> GetEnumerator()
+        {
+            return (IEnumerator<T>)GetEnumerator();
+        }
+
+        IEnumerator IEnumerable.GetEnumerator()
+        {
+            return newlist.GetEnumerator();
+        }
+    }
+    class Program
+    {
+        static void Main(string[] args)
+        {
+            MyList<int> list = new MyList<int> { 1, 2, 3, 4, 5 };
+            list.Print();
+            Console.WriteLine(list.Size);
+            list.Add(6, 7, 8);
+            list.Print();
+            Console.WriteLine(list.Size);
+            Console.WriteLine(list[5]);
+        }
+    }
+}
