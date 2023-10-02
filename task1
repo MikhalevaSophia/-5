@@ -1,0 +1,168 @@
+using System;
+using System.Collections.Generic;
+using System.Linq;
+using System.Runtime.ExceptionServices;
+using System.Text;
+using System.Threading.Tasks;
+
+namespace task1
+{
+    class MyMatrix
+    {
+        private int n, m;
+        private int[,] mass;
+        public int N
+        {
+            get { return n; }
+            set { if (value > 0) n = value; }
+        }
+        public int M
+        {
+            get { return m; }
+            set { if (value > 0) m = value; }
+        }
+        public MyMatrix(int n, int m)
+        {
+            this.n = n;
+            this.m = m;
+            mass = new int[this.n, this.m];
+        }
+        public int this[int i, int j]
+        {
+            get
+            {
+                return mass[i, j];
+            }
+            set
+            {
+                mass[i, j] = value;
+            }
+        }
+
+        public MyMatrix(int n, int m, int min, int max)//constructor
+        {
+            this.n = n;
+            this.m = m;
+            mass = new int[this.n, this.m];
+            Random rand = new Random();
+            for (int i = 0; i < n; i++)
+                for (int j = 0; j < m; j++)
+                    mass[i, j] = rand.Next(min, max);
+        }
+        public void Read()//method
+        {
+            for (int i = 0; i < n - 1; i++)
+            {
+                for (int j = 0; j < m - 1; j++)
+                {
+                    Console.Write(mass[i, j] + "\t");
+                }
+                Console.WriteLine();
+            }
+        }
+        public void Fill()
+        {
+            Random rand = new Random();
+            for (int i = 0; i < n; i++)
+                for (int j = 0; j < m; j++)
+                    mass[i, j] = rand.Next(1, 50);
+        }
+        public void ChangeSize(int nn, int mm)
+        {
+            Random rand = new Random();
+            int[,] matr = new int[nn, mm];
+            for (int i = 0; i < n; i++)
+            {
+                if (i < n)
+                {
+                    for (int j = 0; j < m; j++)
+                    {
+                        if (j < m)
+                        {
+                            matr[i, j] = mass[i, j];
+                        }
+                        else
+                        {
+                            matr[i, j] = rand.Next(-100, 100);
+                        }
+                    }
+                }
+                else
+                {
+                    for (int j = 0; j < m; j++)
+                    {
+                        matr[i, j] = rand.Next(-100, 100);
+                    }
+                }
+            }
+            mass = new int[nn, mm];
+            mass = matr;
+            n = nn;
+            m = mm;
+        }
+        public void ShowPartiatly(int[] first, int[] last)
+        {
+            for (int i = first[0]; i <= last[0]; i++)
+            {
+                if (i < first[0] && first[0] == last[0])
+                {
+                    for (int j = first[1]; j <= last[1]; j++)
+                    {
+                        Console.Write(mass[i, j] + "\t");
+                    }
+                    break;
+                }
+                else if (i == first[0])
+                {
+                    for (int j = first[1]; j < m; j++)
+                    {
+                        Console.Write(mass[i, j] + "\t");
+                    }
+                    break;
+                }
+                else if (i < last[0])
+                {
+                    for (int j = 0; j < m; j++)
+                    {
+                        Console.Write(mass[i, j] + "\t");
+                    }
+                    break;
+                }
+                else if (i == last[0])
+                {
+                    for (int j = 0; j <= last[1]; j++)
+                    {
+                        Console.Write(mass[i, j] + "\t");
+                    }
+                    break;
+                }
+            }
+        }
+    }
+    class Program
+    {
+        static void Main(string[] args)
+        {
+            Console.WriteLine("Введите размерзность матрицы A");
+            int n = Convert.ToInt32(Console.ReadLine());
+            int m = Convert.ToInt32(Console.ReadLine());
+            Console.WriteLine("Введите диапазон");
+            int min = Convert.ToInt32(Console.ReadLine());
+            int max = Convert.ToInt32(Console.ReadLine());
+            MyMatrix m1 = new MyMatrix(n, m, min, max);
+            m1.Read();
+            Console.WriteLine("Изменение в матрице");
+            m1.Fill();
+            m1.Read();
+            Console.WriteLine("Введеите новые размеры матриц");
+            int nn = Convert.ToInt32(Console.ReadLine());
+            int mm = Convert.ToInt32(Console.ReadLine());
+            m1.ChangeSize(nn, mm);
+            m1.Read();
+            int[] a = new int[] { 1, 2 };
+            int[] b = new int[] { 4, 5 };
+            Console.WriteLine("Часть матрицы");
+            m1.ShowPartiatly(a, b);
+        }
+    }
+}
