@@ -1,0 +1,60 @@
+using System;
+using System.Collections;
+using System.Collections.Generic;
+using System.Linq;
+using System.Runtime.ExceptionServices;
+using System.Text;
+using System.Threading.Tasks;
+
+namespace task3
+{
+    class MyDictionary<TKey, TValue> : IEnumerable
+    {
+        Tuple<TKey, TValue>[] _tuple;
+        int _size;
+        public int Count { get { return _size; } }
+        public MyDictionary(int size)
+        {
+            _tuple = new Tuple<TKey, TValue>[size];
+            _size = 0;
+        }
+        public void Add(TKey key, TValue value)
+        {
+            if(_size == _tuple.Length)
+            {
+                Tuple<TKey, TValue>[] newtuple = new Tuple<TKey, TValue>[_size * 2];
+                for(int i = 0; i < _size; i++)
+                {
+                    newtuple[i] = _tuple[i];
+                }
+                _tuple = newtuple;
+            }
+            _tuple[_size] = new Tuple<TKey, TValue>(key, value);
+            _size++;
+        }
+        public Tuple<TKey, TValue> this[int index]
+        {
+            get { return _tuple[index]; }
+        }
+        IEnumerator IEnumerable.GetEnumerator() => (IEnumerator)_tuple.GetEnumerator();
+    }
+    class Program
+    {
+        static void Main(string[] args)
+        {
+            MyDictionary<int, string> myd = new MyDictionary<int, string>(2);
+            myd.Add(3,"Sin");
+            myd.Add(2,"Cos");
+            myd.Add(3, "Tg");
+
+            for (int i = 0;i < myd.Count;i++)
+            {
+                Console.WriteLine(myd[i]);
+            }
+            foreach(Tuple<int, string> tuple in myd)
+            {
+                Console.WriteLine(tuple);
+            }
+        }
+    }
+}
